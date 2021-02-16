@@ -30,4 +30,6 @@ console.log(fibonacci(4));
 console.log(fibonacci(5));
 console.log(fibonacci(6));
 console.log(fibonacci(7));
+
+//Use only with Memoization enabled method.. tends to lag exponentially if not used with memoization
 console.log(fibonacci(100));
