@@ -62,7 +62,6 @@ class BST {
 
     let left = this.findMinHeight(root.left);
     let right = this.findMinHeight(root.right);
-
     return left < right ? left + 1 : right + 1;
   }
 
@@ -84,6 +83,23 @@ class BST {
       console.log(root.data);
     } else this.traverse(root.right);
   }
+
+  findPath(find, root = this.rootNode) {
+    if (root === null) return null;
+    if (find === root.data) return [find];
+    if (find < root.data) {
+      let result = this.findPath(find, root.left);
+      if (result) {
+        return [...result, root.data];
+      }
+    }
+    if (find > root.data) {
+      let result = this.findPath(find, root.right);
+      if (result) {
+        return [...result, root.data];
+      }
+    }
+  }
 }
 
 function main() {
@@ -102,6 +118,8 @@ function main() {
   console.log("Max Height: " + bst.findMaxHeight());
   console.log("Min Value: " + bst.findMinValue());
   console.log("Max Value: " + bst.findMaxValue());
+  console.log(bst.findPath(22));
+  bst.traverse();
 }
 
 main();
