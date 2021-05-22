@@ -74,16 +74,6 @@ class BST {
     return left > right ? left + 1 : right + 1;
   }
 
-  traverse(root = this.rootNode) {
-    if (root == null) return console.log("No nodes in the tree");
-    if (root.left === null) {
-      console.log(root.data);
-    } else this.traverse(root.left);
-    if (root.right === null) {
-      console.log(root.data);
-    } else this.traverse(root.right);
-  }
-
   findPath(find, root = this.rootNode) {
     if (root === null) return null;
     if (find === root.data) return [find];
@@ -99,6 +89,46 @@ class BST {
         return [...result, root.data];
       }
     }
+  }
+
+  remove(data, root = this.rootNode) {
+    if (root === null) return null;
+
+    if (data < root.data) {
+      root.left = this.remove(data, root.left);
+      return root;
+    } else if (data > root.data) {
+      root.right = this.remove(data, root.right);
+      return root;
+    } else {
+      if (root.left === null && root.right === null) {
+        return null;
+      } else if (root.left === null) {
+        return root.right;
+      } else if (root.right === null) {
+        return root.left;
+      }
+      /**
+       * if the not to be removed has two nodes, go to the right node,
+       * move all the way towards its left nodes,
+       * when the last left node is reached, replace it with the target node.
+       */
+      let tempNode = root.right;
+      while (tempNode.left !== null) {
+        tempNode = tempNode.left;
+      }
+      root.data = tempNode.data;
+      //remove the duplicate of tempNode from the tree
+      //This goes deep down to the leaf node and simply deletes it as it is a leaf without children.
+      root.right = this.remove(tempNode.data, root.right);
+      return root;
+    }
+  }
+  contains(data, root = this.rootNode) {
+    if (!root) return false;
+    if (root.data == data) return true;
+    else if (data < root.data) return this.contains(data, root.left);
+    else return this.contains(data, root.right);
   }
 }
 
@@ -118,8 +148,11 @@ function main() {
   console.log("Max Height: " + bst.findMaxHeight());
   console.log("Min Value: " + bst.findMinValue());
   console.log("Max Value: " + bst.findMaxValue());
+  bst.remove(22);
+  console.log("Tree contains 22 : " + bst.contains(22));
+  console.log("Max Value: " + bst.findMaxValue());
+  
   console.log(bst.findPath(22));
-  bst.traverse();
 }
 
 main();
