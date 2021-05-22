@@ -68,8 +68,8 @@ class BST {
   findMaxHeight(root = this.rootNode) {
     if (root === null) return -1;
 
-    let left = this.findMinHeight(root.left);
-    let right = this.findMinHeight(root.right);
+    let left = this.findMaxHeight(root.left);
+    let right = this.findMaxHeight(root.right);
 
     return left > right ? left + 1 : right + 1;
   }
@@ -89,6 +89,10 @@ class BST {
         return [...result, root.data];
       }
     }
+  }
+
+  isBalanced() {
+    return this.findMinHeight() >= this.findMaxHeight() - 1;
   }
 
   remove(data, root = this.rootNode) {
@@ -130,6 +134,66 @@ class BST {
     else if (data < root.data) return this.contains(data, root.left);
     else return this.contains(data, root.right);
   }
+
+  /**
+   * 
+   * @param {Node} root 
+   * @returns  
+   */
+
+  inOrder(root = this.rootNode) {
+    if (root === null) return null;
+    else {
+      let result = [];
+      function traverseInOder(node) {
+        node.left && traverseInOder(node.left);
+        result = [...result, node.data];
+        node.right && traverseInOder(node.right);
+      }
+      traverseInOder(root);
+      return result;
+    }
+  }
+  preOrder(root = this.rootNode) {
+    if (root === null) return null;
+    else {
+      let result = [];
+      function traverseInOder(node) {
+        result = [...result, node.data];
+        node.left && traverseInOder(node.left);
+        node.right && traverseInOder(node.right);
+      }
+      traverseInOder(root);
+      return result;
+    }
+  }
+  postOrder(root = this.rootNode) {
+    if (root === null) return null;
+    else {
+      let result = [];
+      function traverseInOder(node) {
+        node.left && traverseInOder(node.left);
+        node.right && traverseInOder(node.right);
+        result = [...result, node.data];
+      }
+      traverseInOder(root);
+      return result;
+    }
+  }
+  levelOrder(root=this.rootNode){
+    if(root===null) return null;
+    let queue=[];
+    queue.push(root);
+    let result=[];
+    while(queue.length>0)
+    {
+      let node=queue.shift();
+      result.push(node.data)
+      node.left && queue.push(node.left);
+      node.right && queue.push(node.right)      
+    }
+    return result;
+  }
 }
 
 function main() {
@@ -148,11 +212,18 @@ function main() {
   console.log("Max Height: " + bst.findMaxHeight());
   console.log("Min Value: " + bst.findMinValue());
   console.log("Max Value: " + bst.findMaxValue());
-  bst.remove(22);
-  console.log("Tree contains 22 : " + bst.contains(22));
+  console.log("Tree is balanced ?" + bst.isBalanced() ? "Yes" : "No");
+  bst.add(10);
+  console.log("Min Height: " + bst.findMinHeight());
+  console.log("Max Height: " + bst.findMaxHeight());
+  console.log("Tree contains 10 : " + bst.contains(10));
   console.log("Max Value: " + bst.findMaxValue());
-  
+  console.log("Tree is balanced ?" + bst.isBalanced() ? "Yes" : "No");
   console.log(bst.findPath(22));
+  console.log(bst.inOrder());
+  console.log(bst.preOrder());
+  console.log(bst.postOrder());
+  console.log(bst.levelOrder());
 }
 
 main();
