@@ -6,19 +6,17 @@ class Node {
   }
 }
 
-function newNode(value) {
-  return {
-    data: value,
-    left: null,
-    right: null,
-  };
-}
-
 class BST {
   constructor() {
     this.rootNode = null;
   }
 
+  /**
+   * Finds the best position for the given value and inserts it into that position
+   * If the the value exists, no insertion will occur
+   * @param {Object} value
+   * @returns nothing
+   */
   add(value) {
     if (this.rootNode === null) return (this.rootNode = new Node(value));
 
@@ -41,22 +39,47 @@ class BST {
     return insert(this.rootNode);
   }
 
+  /**
+   *
+   * Finds minimum value in the tree.
+   * @returns Integer
+   */
   findMinValue() {
     return this.findMin().data;
   }
+  /**
+   *
+   * Finds maximum value in the tree.
+   * @returns Integer
+   */
   findMaxValue() {
     return this.findMax().data;
   }
+  /**
+   *
+   * Returns Minimum value Node from the tree.
+   * @returns Node
+   */
   findMin(root = this.rootNode) {
     if (root == null) return -1;
     if (root.left === null) return root;
     return this.findMin(root.left);
   }
+  /**
+   *
+   * Returns Maximum value Node from the tree.
+   * @returns Node
+   */
   findMax(root = this.rootNode) {
     if (root == null) return -1;
     if (root.right === null) return root;
     return this.findMax(root.right);
   }
+  /**
+   *
+   * Returns Minimum Height of the tree.
+   * @returns Integer
+   */
   findMinHeight(root = this.rootNode) {
     if (root === null) return -1;
 
@@ -64,7 +87,11 @@ class BST {
     let right = this.findMinHeight(root.right);
     return left < right ? left + 1 : right + 1;
   }
-
+  /**
+   *
+   * Returns Maximum Height of the tree.
+   * @returns Integer
+   */
   findMaxHeight(root = this.rootNode) {
     if (root === null) return -1;
 
@@ -73,7 +100,12 @@ class BST {
 
     return left > right ? left + 1 : right + 1;
   }
-
+  /**
+   *
+   * @param {Object} find
+   * Returns Array consisting of exact path that leads to the item (find) in the tree.
+   * @returns Array[]
+   */
   findPath(find, root = this.rootNode) {
     if (root === null) return null;
     if (find === root.data) return [find];
@@ -91,10 +123,20 @@ class BST {
     }
   }
 
+  /**
+   * Returns false/ true if the tree is balanced/un-balanced
+   * @returns Boolean
+   */
   isBalanced() {
     return this.findMinHeight() >= this.findMaxHeight() - 1;
   }
 
+  /**
+   * Removes a node from the tree and re-arranges subsequent nodes accordingly.
+   * @param {Object} data
+   * @param {Node} root
+   * @returns Root Node
+   */
   remove(data, root = this.rootNode) {
     if (root === null) return null;
 
@@ -128,6 +170,13 @@ class BST {
       return root;
     }
   }
+
+  /**
+   * Checks whether item exists in the tree or not
+   * @param {Object} data
+   * @param {*} root
+   * @returns true/false
+   */
   contains(data, root = this.rootNode) {
     if (!root) return false;
     if (root.data == data) return true;
@@ -136,9 +185,9 @@ class BST {
   }
 
   /**
-   * 
-   * @param {Node} root 
-   * @returns  
+   * Returns an array of items sorted inOrder
+   * @param {Node} root
+   * @returns Array[]
    */
 
   inOrder(root = this.rootNode) {
@@ -154,6 +203,11 @@ class BST {
       return result;
     }
   }
+  /**
+   * Returns an array of items sorted preOrder
+   * @param {Node} root
+   * @returns Array[]
+   */
   preOrder(root = this.rootNode) {
     if (root === null) return null;
     else {
@@ -167,6 +221,12 @@ class BST {
       return result;
     }
   }
+  /**
+   * Returns an array of items sorted postOrder
+   * @param {Node} root
+   * @returns Array[]
+   */
+
   postOrder(root = this.rootNode) {
     if (root === null) return null;
     else {
@@ -180,17 +240,23 @@ class BST {
       return result;
     }
   }
-  levelOrder(root=this.rootNode){
-    if(root===null) return null;
-    let queue=[];
+
+  /**
+   * Returns an array of items sorted levelOrder
+   * @param {Node} root
+   * @returns Array[]
+   */
+
+  levelOrder(root = this.rootNode) {
+    if (root === null) return null;
+    let queue = [];
     queue.push(root);
-    let result=[];
-    while(queue.length>0)
-    {
-      let node=queue.shift();
-      result.push(node.data)
+    let result = [];
+    while (queue.length > 0) {
+      let node = queue.shift();
+      result.push(node.data);
       node.left && queue.push(node.left);
-      node.right && queue.push(node.right)      
+      node.right && queue.push(node.right);
     }
     return result;
   }
@@ -219,6 +285,7 @@ function main() {
   console.log("Tree contains 10 : " + bst.contains(10));
   console.log("Max Value: " + bst.findMaxValue());
   console.log("Tree is balanced ?" + bst.isBalanced() ? "Yes" : "No");
+  bst.remove(10);
   console.log(bst.findPath(22));
   console.log(bst.inOrder());
   console.log(bst.preOrder());
